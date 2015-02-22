@@ -3,7 +3,6 @@ var http = require('http'),
     request = require('request'),
     colors = require('colors'),
     util = require('util'),
-    bodyParser = require('body-parser'),
     httpProxy = require('http-proxy'),
     proxy = httpProxy.createProxyServer({})
     util = require ('util')
