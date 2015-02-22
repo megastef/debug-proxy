@@ -6,7 +6,12 @@ var http = require('http'),
     httpProxy = require('http-proxy'),
     proxy = httpProxy.createProxyServer({})
     util = require ('util')
+    useColors = false
+    argv = require('minimist')(process.argv.slice(2));
 
+var target = argv['h'] || 'htpp://localhost:9200'
+var useColors = argv['c'] 
+var port = argv['p'] || 9100
 
 //
 //  Basic Http Proxy Server
@@ -39,21 +44,29 @@ var app = connect()
         var color =  'red'
         if (res.statusCode < 400)
             color = 'green'
-        var reqMsg = util.format ('%s REQ %s\n\t%s', req.ts.toISOString(), req.method + ' ' + req.url, req.body.yellow ).yellow
-        var resMsg = util.format ('%s RES %s\n\t%s'[color], new Date().toISOString(), res.statusCode, res.body[color] )
-        console.log(reqMsg)
-        console.log(resMsg)
+        if (useColors == true) {
+          var reqMsg = util.format ('%s REQ %s\n\t%s', req.ts.toISOString(), req.method + ' ' + req.url, req.body.yellow ).yellow
+          var resMsg = util.format ('%s RES %s\n\t%s'[color], new Date().toISOString(), res.statusCode, res.body[color] )
+          console.log(reqMsg)
+          console.log(resMsg)
+        } else {
+          var reqMsg = util.format ('%s REQ %s\n\t%s', req.ts.toISOString(), req.method + ' ' + req.url, req.body )
+          var resMsg = util.format ('%s RES %s\n\t%s', new Date().toISOString(), res.statusCode, res.body)
+          console.log(reqMsg)
+          console.log(resMsg)
+        }
+        
     
     }
     
     
     proxy.web(req, res, {
-      target: process.argv[2] || 'http://127.0.0.1:9200'
+      target: target || 'http://127.0.0.1:9200'
     })
   });
 
-http.createServer(app).listen(process.argv[3] ||9100, function(){
-  console.log('proxy listen ' + (process.argv[3] ||9100));
+http.createServer(app).listen(port, function(){
+  console.log('proxy listen ' + port);
 });
 
 
