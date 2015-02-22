@@ -13,8 +13,6 @@ var http = require('http'),
 //
 var app = connect()
   .use(function(req, res){
-    // modify body here,
-    // eg: req.body = {a: 1}.
     req.ts = new Date()
     var _write = res.write;
     res.body = ''
@@ -29,7 +27,8 @@ var app = connect()
       
       var data = _read.call(req);
       req.body += data.toString()
-      //console.log(data.toString())
+      return data
+
     }
     var _end = res.end
     res.end = function (data)
