@@ -52,8 +52,8 @@ var app = connect()
     })
   });
 
-http.createServer(app).listen(9100, function(){
-  console.log('proxy linsten 9100');
+http.createServer(app).listen(process.argv[3] ||9100, function(){
+  console.log('proxy listen ' + (process.argv[3] ||9100));
 });
 
 
