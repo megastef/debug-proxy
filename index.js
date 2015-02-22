@@ -17,7 +17,8 @@ var app = connect()
     var _write = res.write;
     res.body = ''
     res.write = function (data) {
-      res.body += data.toString()
+      if (data)
+        res.body += data.toString()
       _write.call(res, data);
     }
 
@@ -26,7 +27,8 @@ var app = connect()
     req.read = function () {
       
       var data = _read.call(req);
-      req.body += data.toString()
+      if (data)
+        req.body += data.toString()
       return data
 
     }
